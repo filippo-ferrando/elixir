@@ -1,0 +1,77 @@
+DEBUG:root:Initial prompt 
+ You are part of an elite automated software fixing team. You will be given a script followed by the arguments it was provided and the stacktrace of the error it produced. Your job is to figure out what went wrong and suggest changes to the code.
+
+Because you are part of an automated system, the format you respond in is very strict. You must provide changes in JSON format, using one of 3 actions: 'Replace', 'Delete', or 'InsertAfter'. 'Delete' will remove that line from the code. 'Replace' will replace the existing line with the content you provide. 'InsertAfter' will insert the new lines you provide after the code already at the specified line number. For multi-line insertions or replacements, provide the content as a single string with '\n' as the newline character. The first line in each file is given line number 1. Edits will be applied in reverse line order so that line numbers won't be impacted by other edits.
+
+The snippets you will receive will be mainly written in python3, so you absolutely have to stick to the optimal spacing and indentation for the program to work
+
+In addition to the changes, please also provide short explanations of the what went wrong. A single explanation is required, but if you think it's helpful, feel free to provide more explanations for groups of more complicated changes. Be careful to use proper indentation and spacing in your changes. An example response could be:
+
+[
+  {"explanation": "this is just an example, this would usually be a brief explanation of what went wrong"},
+  {"operation": "InsertAfter", "line": 10, "content": "x = 1\ny = 2\nz = x * y"},
+  {"operation": "Delete", "line": 15, "content": ""},
+  {"operation": "Replace", "line": 18, "content": "x += 1"},
+  {"operation": "Delete", "line": 20, "content": ""}
+]
+
+This is the script you need to fix:
+
+1: import fire
+2: 
+3: def factorial(x):
+4:     """This is a recursive function
+5:     to find the factorial of an integer"""
+6: 
+7:     if x == 1:
+8:         return 1
+9:     else:
+10:         return (x - factorial(x+1))
+11: 
+12: 
+13: 
+14: def main(n):
+15:     print(f"Factorial of {n} is {factorial(n)}")
+16: 
+17: if __name__ == "__main__":
+18:     fire.Fire(main)
+
+This are the arguments you need to pass:
+
+(3,)
+
+This is the error message:
+
+Traceback (most recent call last):
+  File "/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py", line 18, in <module>
+    fire.Fire(main)
+  File "/home/rdfilippo/.local/lib/python3.10/site-packages/fire/core.py", line 141, in Fire
+    component_trace = _Fire(component, args, parsed_flag_args, context, name)
+  File "/home/rdfilippo/.local/lib/python3.10/site-packages/fire/core.py", line 475, in _Fire
+    component, remaining_args = _CallAndUpdateTrace(
+  File "/home/rdfilippo/.local/lib/python3.10/site-packages/fire/core.py", line 691, in _CallAndUpdateTrace
+    component = fn(*varargs, **kwargs)
+  File "/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py", line 15, in main
+    print(f"Factorial of {n} is {factorial(n)}")
+  File "/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py", line 10, in factorial
+    return (x - factorial(x+1))
+  File "/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py", line 10, in factorial
+    return (x - factorial(x+1))
+  File "/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py", line 10, in factorial
+    return (x - factorial(x+1))
+  [Previous line repeated 991 more times]
+  File "/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py", line 7, in factorial
+    if x == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+
+Provide a fix for the script and strictly stick to the exact format written above
+
+
+DEBUG:openai:message='Request to OpenAI API' method=post path=https://api.openai.com/v1/chat/completions
+DEBUG:openai:api_version=None data='{"model": "gpt-4", "messages": [{"role": "user", "content": "You are part of an elite automated software fixing team. You will be given a script followed by the arguments it was provided and the stacktrace of the error it produced. Your job is to figure out what went wrong and suggest changes to the code.\\n\\nBecause you are part of an automated system, the format you respond in is very strict. You must provide changes in JSON format, using one of 3 actions: \'Replace\', \'Delete\', or \'InsertAfter\'. \'Delete\' will remove that line from the code. \'Replace\' will replace the existing line with the content you provide. \'InsertAfter\' will insert the new lines you provide after the code already at the specified line number. For multi-line insertions or replacements, provide the content as a single string with \'\\\\n\' as the newline character. The first line in each file is given line number 1. Edits will be applied in reverse line order so that line numbers won\'t be impacted by other edits.\\n\\nThe snippets you will receive will be mainly written in python3, so you absolutely have to stick to the optimal spacing and indentation for the program to work\\n\\nIn addition to the changes, please also provide short explanations of the what went wrong. A single explanation is required, but if you think it\'s helpful, feel free to provide more explanations for groups of more complicated changes. Be careful to use proper indentation and spacing in your changes. An example response could be:\\n\\n[\\n  {\\"explanation\\": \\"this is just an example, this would usually be a brief explanation of what went wrong\\"},\\n  {\\"operation\\": \\"InsertAfter\\", \\"line\\": 10, \\"content\\": \\"x = 1\\\\ny = 2\\\\nz = x * y\\"},\\n  {\\"operation\\": \\"Delete\\", \\"line\\": 15, \\"content\\": \\"\\"},\\n  {\\"operation\\": \\"Replace\\", \\"line\\": 18, \\"content\\": \\"x += 1\\"},\\n  {\\"operation\\": \\"Delete\\", \\"line\\": 20, \\"content\\": \\"\\"}\\n]\\n\\nThis is the script you need to fix:\\n\\n1: import fire\\n2: \\n3: def factorial(x):\\n4:     \\"\\"\\"This is a recursive function\\n5:     to find the factorial of an integer\\"\\"\\"\\n6: \\n7:     if x == 1:\\n8:         return 1\\n9:     else:\\n10:         return (x - factorial(x+1))\\n11: \\n12: \\n13: \\n14: def main(n):\\n15:     print(f\\"Factorial of {n} is {factorial(n)}\\")\\n16: \\n17: if __name__ == \\"__main__\\":\\n18:     fire.Fire(main)\\n\\nThis are the arguments you need to pass:\\n\\n(3,)\\n\\nThis is the error message:\\n\\nTraceback (most recent call last):\\n  File \\"/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py\\", line 18, in <module>\\n    fire.Fire(main)\\n  File \\"/home/rdfilippo/.local/lib/python3.10/site-packages/fire/core.py\\", line 141, in Fire\\n    component_trace = _Fire(component, args, parsed_flag_args, context, name)\\n  File \\"/home/rdfilippo/.local/lib/python3.10/site-packages/fire/core.py\\", line 475, in _Fire\\n    component, remaining_args = _CallAndUpdateTrace(\\n  File \\"/home/rdfilippo/.local/lib/python3.10/site-packages/fire/core.py\\", line 691, in _CallAndUpdateTrace\\n    component = fn(*varargs, **kwargs)\\n  File \\"/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py\\", line 15, in main\\n    print(f\\"Factorial of {n} is {factorial(n)}\\")\\n  File \\"/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py\\", line 10, in factorial\\n    return (x - factorial(x+1))\\n  File \\"/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py\\", line 10, in factorial\\n    return (x - factorial(x+1))\\n  File \\"/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py\\", line 10, in factorial\\n    return (x - factorial(x+1))\\n  [Previous line repeated 991 more times]\\n  File \\"/home/rdfilippo/Desktop/Projects/elixir/test_script/buggy1.py\\", line 7, in factorial\\n    if x == 1:\\nRecursionError: maximum recursion depth exceeded in comparison\\n\\n\\nProvide a fix for the script and strictly stick to the exact format written above\\n\\n"}], "temperature": 0.9}' message='Post details'
+DEBUG:urllib3.util.retry:Converted retries value: 2 -> Retry(total=2, connect=None, read=None, redirect=None, status=None)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.openai.com:443
+DEBUG:urllib3.connectionpool:https://api.openai.com:443 "POST /v1/chat/completions HTTP/1.1" 404 None
+DEBUG:openai:message='OpenAI API response' path=https://api.openai.com/v1/chat/completions processing_ms=None request_id=43932d2c373709c2c40fdb817fafaea9 response_code=404
+INFO:openai:error_code=model_not_found error_message='The model: `gpt-4` does not exist' error_param=None error_type=invalid_request_error message='OpenAI API error received' stream_error=False
